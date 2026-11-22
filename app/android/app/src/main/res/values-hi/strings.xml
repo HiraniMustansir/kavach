@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kavach</string>
+    <string name="status_title">Kavach इस फ़ोन को सुरक्षित रख रहा है</string>
+    <string name="status_body">देखें कि आपके माता-पिता क्या देख सकते हैं</string>
+    <string name="channel_status">सुरक्षा स्थिति</string>
+    <string name="limit_warning">आज फ़ोन के %1$d मिनट बाकी हैं</string>
+    <string name="admin_disable_warning">इसे बंद करने पर आपके माता-पिता को तुरंत बताया जाएगा।</string>
+    <string name="admin_explanation">माता-पिता के कहने पर फ़ोन लॉक करने और सुरक्षा हटने पर उन्हें बताने के लिए Kavach को इसकी ज़रूरत है।</string>
+    <string name="a11y_description">Kavach यह देखने के लिए इसका उपयोग करता है कि कौन-सा ऐप खुला है और स्क्रीन पर असुरक्षित सामग्री तो नहीं, केवल इसी फ़ोन पर। स्क्रीन और मैसेज फ़ोन से बाहर नहीं जाते; माता-पिता को केवल सामग्री का प्रकार और ऐप दिखता है।</string>
+</resources>

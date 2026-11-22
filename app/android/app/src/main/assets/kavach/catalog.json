@@ -1,0 +1,56 @@
+{
+  "version": "2026.11.22-seed",
+  "domains": {
+    "adult": ["pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com", "youporn.com", "spankbang.com", "onlyfans.com", "chaturbate.com", "stripchat.com", "brazzers.com", "rule34.xxx", "e-hentai.org", "nhentai.net"],
+    "gambling": ["bet365.com", "1xbet.com", "parimatch.com", "dafabet.com", "stake.com", "betway.com", "22bet.com", "4rabet.com", "mostbet.com", "rummycircle.com", "junglee.com", "pokerbaazi.com", "sattaking.com"],
+    "gore": ["theync.com", "kaotic.com", "goregrish.com", "crazyshit.com", "bestgore.fun"],
+    "dating": ["tinder.com", "bumble.com", "okcupid.com", "badoo.com", "omegle.com", "chatroulette.com", "ometv.chat"],
+    "drugs": ["erowid.org"],
+    "proxy": ["hidester.com", "croxyproxy.com", "proxysite.com", "hide.me"]
+  },
+  "domainKeywords": {
+    "adult": "(porn|xxx|xvideo|hentai|nude|sexvid|camgirl)",
+    "gambling": "(casino|betting|satta|1xbet|bet365)",
+    "gore": "(gore|beheading)"
+  },
+  "apps": {
+    "vault": ["com.domobile.applockwatcher", "com.sp.protector.free", "com.hld.anzenbokusucal", "com.flatfish.cal.privacy", "com.calculator.hideu", "com.netqin.ps", "com.thinkyeah.galleryvault"],
+    "vpn": ["com.nordvpn.android", "com.expressvpn.vpn", "free.vpn.unblock.proxy.turbovpn", "com.psiphon3", "com.psiphon3.subscription", "org.torproject.torbrowser", "org.torproject.android", "hotspotshield.android.vpn", "com.cloudflare.onedotonedotonedotone", "ch.protonvpn.android", "com.tunnelbear.android", "com.windscribe.vpn"],
+    "dating": ["com.tinder", "com.bumble.app", "co.hinge.app", "com.badoo.mobile", "com.okcupid.okcupid", "omegle.tv"],
+    "gambling": ["com.rummycircle", "com.junglee.rummy", "com.my11circle.android", "com.pokerbaazi"],
+    "second_space": ["com.lbe.parallel.intl", "com.excelliance.multiaccounts", "com.parallel.space.lite", "com.ludashi.dualspace"],
+    "ai_chat": ["com.openai.chatgpt", "com.google.android.apps.bard", "ai.character.app", "com.microsoft.copilot"]
+  },
+  "highRiskSurfaces": [
+    "com.android.chrome", "com.sec.android.app.sbrowser", "org.mozilla.firefox", "com.microsoft.emmx", "com.opera.browser", "com.opera.mini.native", "com.brave.browser", "com.mi.globalbrowser", "com.UCMobile.intl", "com.duckduckgo.mobile.android",
+    "com.google.android.youtube", "com.instagram.android", "com.snapchat.android", "org.telegram.messenger", "com.whatsapp", "com.facebook.katana", "com.facebook.orca", "com.twitter.android", "com.reddit.frontpage", "com.discord",
+    "in.mohalla.sharechat", "in.mohalla.video", "com.eterno.shortvideos", "com.next.innovation.takatak", "com.zhiliaoapp.musically",
+    "com.openai.chatgpt", "com.google.android.apps.bard", "ai.character.app", "com.microsoft.copilot"
+  ],
+  "lowRiskSurfaces": [
+    "com.google.android.calculator", "com.miui.calculator", "com.sec.android.app.popupcalculator", "com.google.android.inputmethod.latin", "com.samsung.android.honeyboard",
+    "com.google.android.dialer", "com.samsung.android.dialer", "com.google.android.apps.maps", "com.byjus.thelearningapp", "org.khanacademy.android", "com.duolingo"
+  ],
+  "urlBarIds": {
+    "com.android.chrome": "com.android.chrome:id/url_bar",
+    "com.sec.android.app.sbrowser": "com.sec.android.app.sbrowser:id/location_bar_edit_text",
+    "org.mozilla.firefox": "org.mozilla.firefox:id/mozac_browser_toolbar_url_view",
+    "com.microsoft.emmx": "com.microsoft.emmx:id/url_bar",
+    "com.brave.browser": "com.brave.browser:id/url_bar",
+    "com.opera.browser": "com.opera.browser:id/url_field",
+    "com.mi.globalbrowser": "com.mi.globalbrowser:id/url",
+    "com.UCMobile.intl": "com.UCMobile.intl:id/url",
+    "com.duckduckgo.mobile.android": "com.duckduckgo.mobile.android:id/omnibarTextInput"
+  },
+  "searchFieldIds": [
+    "com.google.android.youtube:id/search_edit_text",
+    "com.android.vending:id/search_bar_text_input",
+    "com.google.android.googlequicksearchbox:id/googleapp_search_box",
+    "com.instagram.android:id/action_bar_search_edit_text"
+  ],
+  "essentialApps": [
+    "com.android.settings", "com.android.phone", "com.android.server.telecom", "com.google.android.dialer", "com.samsung.android.dialer",
+    "com.android.dialer", "com.google.android.apps.messaging", "com.samsung.android.messaging", "com.android.mms", "com.android.systemui",
+    "com.google.android.apps.maps", "com.android.emergency", "com.google.android.inputmethod.latin", "com.samsung.android.honeyboard"
+  ]
+}

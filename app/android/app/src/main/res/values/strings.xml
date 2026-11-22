@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kavach</string>
+    <string name="status_title">Kavach is keeping this phone safe</string>
+    <string name="status_body">Tap to see what\'s shared with your parent</string>
+    <string name="channel_status">Protection status</string>
+    <string name="limit_warning">%1$d minutes of phone time left today</string>
+    <string name="admin_disable_warning">Turning this off will tell your parent right away.</string>
+    <string name="admin_explanation">Kavach needs this so it can lock the phone when your parent asks and alert them if protection is removed.</string>
+    <string name="a11y_description">Kavach uses this to see which app is open and to check what is on screen for unsafe content, on this phone only. Screens and messages never leave the phone; your parent only sees the type of content and the app. Required for Kavach child protection, set up by your parent.</string>
+</resources>

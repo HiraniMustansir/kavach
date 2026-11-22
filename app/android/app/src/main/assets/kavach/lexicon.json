@@ -1,0 +1,65 @@
+{
+  "version": "2026.11.22-seed",
+  "note": "Seed lexicon (EN / Hindi / Hinglish). Weights are noisy-OR contributions. Replace via signed bundle (CLS-8). Ids starting cse_/strng_ feed the grooming window; the suffix after the last _ is a variant.",
+  "categories": {
+    "SEX": { "patterns": [
+      { "id": "sex_porn_1", "re": "\\b(porn\\w*|p\\*rn|pr0n|xxx+|nsfw|hentai|onlyfans|nudes?|naked (girls?|boys?|pics?|videos?))\\b", "w": 0.85 },
+      { "id": "sex_act_1", "re": "\\b(blowjob|handjob|sex ?video|sex ?tape|hot sex|camgirl|cam ?show|strip ?chat|lesbian sex|gay sex)\\b", "w": 0.8 },
+      { "id": "sex_hing_1", "re": "\\b(chudai|sexy video|nangi|nanga video|bf video|blue film|desi mms|mms leak)\\b", "w": 0.85 },
+      { "id": "sex_hi_1", "re": "(चुदाई|नंगी|अश्लील वीडियो|ब्लू फिल्म|सेक्सी वीडियो)", "w": 0.85 },
+      { "id": "sex_soft_1", "re": "\\b(sexy|hot girls?|bikini|boobs?|horny)\\b", "w": 0.35 }
+    ]},
+    "CSE": { "patterns": [
+      { "id": "cse_secret_1", "re": "\\b(don'?t tell (your|ur) (mom|mum|dad|parents?)|our (little )?secret|keep (this|it) (between us|secret)|delete (this|our) chat)\\b", "w": 0.55 },
+      { "id": "cse_secret_2", "re": "\\b(kisi ko mat (batana|bolna)|mummy ko mat batana|papa ko mat batana|ghar pe mat batana|secret rakhna)\\b", "w": 0.55 },
+      { "id": "cse_secret_3", "re": "(किसी को मत बताना|मम्मी को मत बताना|पापा को मत बताना)", "w": 0.55 },
+      { "id": "cse_pic_1", "re": "\\b(send (me )?(a )?(pic|pics|photo|selfie|video) (of you|without|in your)|show me your body|take off your|are you alone)\\b", "w": 0.6 },
+      { "id": "cse_pic_2", "re": "\\b(apni (pic|photo|video) bhejo|kapde utaro|akeli ho|akele ho kya)\\b", "w": 0.6 },
+      { "id": "cse_age_1", "re": "\\b(how old are (you|u)|what grade are you in|kitne saal ki ho|kitne saal ke ho|kaunsi class)\\b", "w": 0.25 },
+      { "id": "cse_extort_1", "re": "\\b(i will (share|post|leak|send) (your|ur) (pics?|photos?|video)|pay (me )?or i|everyone will see (your|ur))\\b", "w": 0.85 },
+      { "id": "cse_extort_2", "re": "\\b(viral kar dunga|photo viral|video viral kar|paise bhejo warna)\\b", "w": 0.85 }
+    ]},
+    "STRNG": { "patterns": [
+      { "id": "strng_meet_1", "re": "\\b(let'?s meet|meet me (at|after|near)|come alone|where do you live|send (me )?your (location|address))\\b", "w": 0.55 },
+      { "id": "strng_meet_2", "re": "\\b(milne aao|akele aana|kahan rehti ho|kahan rehte ho|apna address bhejo|location bhejo)\\b", "w": 0.55 },
+      { "id": "strng_move_1", "re": "\\b(add me on (snap|snapchat|telegram|insta)|text me on (telegram|whatsapp|snap)|move to (telegram|snap)|what'?s your (number|snap))\\b", "w": 0.45 },
+      { "id": "strng_gift_1", "re": "\\b(i'?ll (give|send) you (free )?(diamonds|uc|robux|money|recharge|gift))\\b", "w": 0.45 }
+    ]},
+    "SELF": { "patterns": [
+      { "id": "self_method_1", "re": "\\b(how to (kill|hurt|cut) (myself|yourself)|painless (way to )?(die|suicide)|suicide methods?|ways to die|how many pills to)\\b", "w": 0.9 },
+      { "id": "self_intent_1", "re": "\\b(i want to die|kill myself|end my life|i don'?t want to live|better off dead|self[- ]?harm|cutting myself)\\b", "w": 0.75 },
+      { "id": "self_hing_1", "re": "\\b(marna chahta|marna chahti|mar jaunga|mar jaungi|jeena nahi chahta|jeena nahi chahti|suicide kar|khudkushi)\\b", "w": 0.75 },
+      { "id": "self_hi_1", "re": "(आत्महत्या|मरना चाहता|मरना चाहती|जीना नहीं चाहता|जीना नहीं चाहती|खुदकुशी)", "w": 0.75 }
+    ]},
+    "GORE": { "patterns": [
+      { "id": "gore_1", "re": "\\b(gore|beheading|beheaded|dismember\\w*|real death video|accident dead body|brutal murder video|blood ?bath)\\b", "w": 0.7 },
+      { "id": "gore_2", "re": "\\b(animal cruelty|kitten crushing|dog killing video)\\b", "w": 0.7 },
+      { "id": "gore_hi_1", "re": "(सिर काट|लाश का वीडियो|हत्या का वीडियो)", "w": 0.7 }
+    ]},
+    "WEAP": { "patterns": [
+      { "id": "weap_1", "re": "\\b(how to (make|build) (a )?(bomb|gun|pipe bomb|explosive)|homemade (gun|explosive)|buy (a )?(gun|pistol|katta) online)\\b", "w": 0.8 },
+      { "id": "weap_2", "re": "\\b(desi katta|country made pistol)\\b", "w": 0.6 }
+    ]},
+    "DRUG": { "patterns": [
+      { "id": "drug_1", "re": "\\b(buy (weed|ganja|charas|mdma|lsd|cocaine|vape)|how to get high|weed delivery|vape online)\\b", "w": 0.7 },
+      { "id": "drug_2", "re": "\\b(ganja|charas|maal phook|nasha kaise)\\b", "w": 0.4 }
+    ]},
+    "GAMB": { "patterns": [
+      { "id": "gamb_1", "re": "\\b(betting tips?|online casino|satta( king| matka)?|real money (game|rummy|teen patti)|deposit bonus|place your bet)\\b", "w": 0.6 },
+      { "id": "gamb_hi_1", "re": "(सट्टा|जुआ)", "w": 0.6 }
+    ]},
+    "HATE": { "patterns": [
+      { "id": "hate_1", "re": "\\b(kill all (muslims|hindus|christians|sikhs|dalits)|gas the|white power|heil hitler)\\b", "w": 0.75 }
+    ]},
+    "BULLY": { "patterns": [
+      { "id": "bully_1", "re": "\\b(kill yourself|kys|nobody likes you|you'?re (so )?(ugly|fat|worthless)|everyone hates you)\\b", "w": 0.6 },
+      { "id": "bully_2", "re": "\\b(tu mar ja|koi tujhe pasand nahi karta)\\b", "w": 0.6 }
+    ]},
+    "SCAM": { "patterns": [
+      { "id": "scam_1", "re": "\\b(free (diamonds|uc|robux|v-?bucks)|diamond generator|claim your (prize|reward) now|you have won|kyc (update|expired)|otp share)\\b", "w": 0.55 }
+    ]},
+    "HORROR": { "patterns": [
+      { "id": "horror_1", "re": "\\b(jump ?scare|creepypasta|scary ghost video|horror video|bhoot wala video)\\b", "w": 0.4 }
+    ]}
+  }
+}
