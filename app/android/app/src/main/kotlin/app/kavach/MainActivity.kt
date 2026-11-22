@@ -49,6 +49,7 @@ class MainActivity : FlutterFragmentActivity() {
                 "selfTest" -> selfTest(result)
                 "today" -> bg { today() }
                 "sos" -> bg { agent.risk.sos(); agent.sync(); true }
+                "reportMisuse" -> bg { agent.api.post("report", JSONObject().put("message", call.argument<String>("message"))); true }
                 "requestTime" -> bg {
                     agent.api.post("request", JSONObject().put("kind", "more_time").put("minutes", call.argument<Int>("minutes") ?: 15)
                         .put("reason", call.argument<String>("reason"))).toString()

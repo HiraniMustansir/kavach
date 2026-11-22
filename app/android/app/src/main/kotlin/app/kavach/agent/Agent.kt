@@ -31,7 +31,7 @@ import java.util.concurrent.Executors
 class Agent private constructor(val ctx: Context) {
     val store = Store(ctx)
     val events = EventStore.get(ctx)
-    val catalog = Catalog.load(ctx)
+    @Volatile var catalog = Catalog.load(ctx); private set
     val usage = UsageCollector(ctx)
     val enforcer = Enforcer(store, catalog, usage, ctx.packageName)
     val api = SyncClient(store)
@@ -117,7 +117,7 @@ class Agent private constructor(val ctx: Context) {
             .put("battery", bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY))
             .put("screenOnRecent", AgentService.screenOnRecently())
             .put("policyVersion", store.policy.version)
-            .put("modelVersion", if (vision != null) "vision" else "rules")
+            .put("modelVersion", (app.kavach.agent.core.BundleManager.currentVersion(VisionGate.modelDir(ctx).parentFile!!) ?: "builtin") + if (vision != null) "+vision" else "")
             .put("currentApp", if (store.ageBand == "child") KavachAccessibilityService.currentLabel else null)
             .put("fcmToken", store.fcmToken)
             .put("ackCommands", JSONArray(synchronized(ackQueue) { ackQueue.toList() }))
@@ -126,6 +126,7 @@ class Agent private constructor(val ctx: Context) {
         synchronized(ackQueue) { ackQueue.clear() }
         r.optLong("serverTime").takeIf { it > 0 }?.let { store.serverSkewMs = it - System.currentTimeMillis() }
         store.tuningJson = (r.optJSONObject("tuning") ?: JSONObject()).toString()
+        syncBundle(r.optJSONObject("bundle"))
         val cmds = r.optJSONArray("commands") ?: JSONArray()
         for (i in 0 until cmds.length()) {
             val c = cmds.getJSONObject(i)
@@ -239,7 +240,23 @@ class Agent private constructor(val ctx: Context) {
         return on.split(':').any { it.equals(want, true) }
     }
 
-    fun reloadModels() { vision = VisionGate.load(ctx) }
+    /** CLS-8: install the assigned bundle, or fall back to built-in rules when none is assigned. */
+    private fun syncBundle(b: JSONObject?) {
+        val dir = VisionGate.modelDir(ctx).parentFile!!
+        val have = app.kavach.agent.core.BundleManager.currentVersion(dir)
+        if (b == null) { if (have != null) { app.kavach.agent.core.BundleManager.clear(dir); reloadModels() }; return }
+        if (b.optString("version") == have) return
+        runCatching { app.kavach.agent.core.BundleManager.install(dir, b) }.onFailure { Log.w(TAG, "bundle rejected", it); return }
+        // New files that don't parse must not leave the phone unprotected: roll back.
+        runCatching { reloadModels() }.onFailure { Log.w(TAG, "bundle failed to load, rolling back", it); app.kavach.agent.core.BundleManager.rollback(dir); reloadModels() }
+    }
+
+    fun reloadModels() {
+        val c = Catalog.load(ctx)
+        val t = TextRisk.load(ctx)
+        catalog = c; enforcer.catalog = c; risk.catalog = c; risk.text = t
+        vision = VisionGate.load(ctx)
+    }
 
     enum class PinResult { OK, WRONG, LOCKED_OUT, NO_PIN }
 

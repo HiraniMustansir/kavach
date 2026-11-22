@@ -30,7 +30,14 @@ async function roleForChild(uid: string, childId: unknown, roles = ["owner", "gu
   const m = c && check(await admin.from("family_member").select("role")
     .eq("family_id", c.family_id).eq("guardian_id", uid).maybeSingle()) as { role: string } | null;
   must(m && roles.includes(m.role), 403, "not allowed for this child");
+  await notSuspended(c!.family_id);
   return c!.family_id;
+}
+
+/** ADM-3: a suspended family can no longer pair, change rules or send commands. */
+async function notSuspended(familyId: string) {
+  const f = check(await admin.from("family").select("suspended_at").eq("id", familyId).single()) as { suspended_at: string | null };
+  must(!f.suspended_at, 403, "this account is suspended; contact support");
 }
 
 async function ownerFamily(uid: string) {

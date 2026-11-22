@@ -121,6 +121,15 @@ class _ChildHomeState extends State<ChildHome> {
             TextButton.icon(onPressed: () => launchUrl(Uri.parse('tel:14416')), icon: const Icon(Icons.call), label: const Text('Tele-MANAS 14416')),
           ])),
           Center(child: TextButton.icon(
+            onPressed: () async {
+              final m = await askReport(context);
+              if (m != null && context.mounted) {
+                await attempt(context, () => AgentBridge.call('reportMisuse', {'message': m}), ok: tr('Report sent to Kavach. Thank you.', 'शिकायत Kavach को भेजी गई। धन्यवाद।'));
+              }
+            },
+            icon: const Icon(Icons.report_rounded), label: Text(tr('Report misuse', 'दुरुपयोग की शिकायत')),
+          )),
+          Center(child: TextButton.icon(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ParentArea())).then((_) => load()),
             icon: const Icon(Icons.lock_rounded), label: Text(tr('Parent area', 'पैरेंट एरिया')),
           )),

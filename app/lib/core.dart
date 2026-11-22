@@ -240,6 +240,20 @@ class Section extends StatelessWidget {
       );
 }
 
+/// ADM-3: free-text misuse report ("someone is monitoring an adult with this"). Returns null if cancelled.
+Future<String?> askReport(BuildContext context) {
+  final c = TextEditingController();
+  return showDialog<String>(context: context, builder: (_) => AlertDialog(
+    title: Text(tr('Report misuse', 'दुरुपयोग की शिकायत')),
+    content: TextField(controller: c, maxLines: 4, maxLength: 1000, decoration: InputDecoration(
+        hintText: tr('e.g. Kavach is being used to watch an adult', 'जैसे Kavach से किसी वयस्क पर नज़र रखी जा रही है'))),
+    actions: [
+      TextButton(onPressed: () => Navigator.pop(context), child: Text(tr('Cancel', 'रद्द करें'))),
+      FilledButton(onPressed: () => Navigator.pop(context, c.text.trim()), child: Text(tr('Send', 'भेजें'))),
+    ],
+  ));
+}
+
 void toast(BuildContext context, String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
 /// Runs an async action with a snackbar on failure; returns true on success.

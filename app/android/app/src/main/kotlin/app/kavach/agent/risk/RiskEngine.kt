@@ -17,7 +17,7 @@ import java.time.LocalDate
  */
 /** Called from the a11y thread, the notification listener and receivers: every entry point is @Synchronized. */
 class RiskEngine(
-    private val store: Store, private val events: EventStore, private val text: TextRisk, private val catalog: Catalog,
+    private val store: Store, private val events: EventStore, @Volatile var text: TextRisk, @Volatile var catalog: Catalog,
     private val onEvent: (RiskEvent, Policy.Cat?) -> Unit,
 ) {
     private val smoother = TemporalSmoother()

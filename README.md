@@ -15,6 +15,8 @@ app/                         Flutter app — parent (Android + iOS) and child sh
     admin/                   Device Owner (Tier A) + Device Admin (Tier B)
     data/ sync/ usage/       SQLCipher queue, signed API client, WorkManager, FCM, UsageStats
   android/app/src/main/assets/kavach/   lexicon.json, catalog.json (remote-updatable data)
+admin/                       Next.js internal console: metrics, bundle rollout, misuse reports (ADM-1..3)
+tools/bundle.ts              sign + upload a rule/model bundle (CLS-8)
 supabase/
   migrations/                schema, RLS, grants, triggers, cron
   functions/device           child-device API (ECDSA-signed requests)
@@ -88,7 +90,34 @@ supabase/tests/rls_smoke.sql                         # paste into the SQL editor
 4. For development without a factory reset: `adb shell dpm set-device-owner app.kavach/.agent.admin.KavachAdminReceiver`
    on a phone with no accounts, then pair with a Tier A code.
 
-## 6. Vision models
+## 6. Rule & model updates (CLS-8)
+
+Keyword lists, domain/app catalogs and models ship as signed bundles, so they change without an app
+release. The signing key is `~/.kavach-keys/bundle-signing.pem` (ECDSA P-256; its public half is pinned
+in `BundleManager.kt`, so rotating it needs an app update).
+
+```bash
+mkdir /tmp/b && cp app/android/app/src/main/assets/kavach/*.json /tmp/b   # edit what you need
+SUPABASE_URL=https://<project>.supabase.co SUPABASE_SERVICE_ROLE_KEY=<secret key> \
+  KAVACH_BUNDLE_KEY=~/.kavach-keys/bundle-signing.pem deno run -A tools/bundle.ts /tmp/b 2026.12.01-1
+```
+
+It uploads as a draft. Roll it out from the admin console (5% → 25% → 100%). Phones verify the
+signature and every file hash, swap it in at their next check-in, and roll back if it fails to load.
+Revoking sends phones back to the rules built into the APK.
+
+## 7. Admin console
+
+```bash
+cd admin && cp ../.env .env.local   # needs NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+npm install && npm run dev          # or deploy to Vercel
+```
+
+Create staff accounts in Supabase → Authentication → Users (email + password), then make them admins:
+`insert into admin_user values ('<user id>');`. The console shows aggregates only; it never shows a
+family's alerts or usage (ADM-2). Suspending a family from a misuse report releases all its phones.
+
+## 8. Vision models
 
 The image classifier (M1) slot loads `files/models/current/vision_gate.tflite` + `vision_gate.json`
 (`{"labels": ["SEX","GORE","WEAP","DRUG","GAMB-UI","HORROR","SAFE"], "input": 224}`). No model is
@@ -97,8 +126,8 @@ not taken at all and detection runs on text, URLs, app categories and behaviour 
 
 ## Not built yet
 
-- Trained models M1–M5 and the signed model-bundle download (CLS-8), OCR (SENSE-6)
+- Trained models M1–M5 (the signed bundle pipeline that delivers them is built), OCR (SENSE-6)
 - Local VPN web filter and SafeSearch (CTL-4), MediaProjection fallback for Android 8–10 (SENSE-7)
 - Co-guardian invites (ACC-5), billing (SET-3), weekly report push (DIG-5), location (LOC-*), SMS fallback (ALR-8)
-- iOS child mode (v2), admin console (ADM-*), Play Integrity (TMP-10)
+- iOS child mode (v2), legal-request workflow (ADM-4), Play Integrity (TMP-10), crash reporting/analytics (needs Sentry/PostHog accounts)
 - Google/Apple sign-in (needs provider setup); the DigiLocker age check is pending legal advice (PRD §15)

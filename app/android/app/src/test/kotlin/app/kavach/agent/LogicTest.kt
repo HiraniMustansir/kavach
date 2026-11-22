@@ -1,5 +1,6 @@
 package app.kavach.agent
 
+import app.kavach.agent.core.BundleManager
 import app.kavach.agent.core.Policy
 import app.kavach.agent.core.Ulid
 import app.kavach.agent.ml.Catalog
@@ -102,5 +103,14 @@ class LogicTest {
         val ids = (1..200).map { Ulid.next(1_700_000_000_000L + it) }
         assertTrue(ids.all { Regex("^[0-9A-HJKMNP-TV-Z]{26}$").matches(it) })
         assertEquals(ids, ids.sorted()) // time-ordered
+    }
+
+    @Test fun bundleSignatureFromToolVerifiesWithPinnedKey() {
+        // Produced by tools/bundle.ts signManifest() with ~/.kavach-keys/bundle-signing.pem.
+        val m = """{"version":"test-1","files":[{"name":"lexicon.json","sha256":"ab","size":1}]}"""
+        val sig = "MEQCIBX0Tir/xnkGJBgEDn0jt7xwB7HZGhFnYxPlo+Sd64GrAiAZ0Z3RlTXLeuhHy64nhMQ2Za3jB5gqvAz9oufg87P5yA=="
+        assertTrue(BundleManager.verify(m, sig))
+        assertFalse(BundleManager.verify(m.replace("test-1", "test-2"), sig)) // tampered manifest
+        assertFalse(BundleManager.verify(m, "AAAA"))
     }
 }

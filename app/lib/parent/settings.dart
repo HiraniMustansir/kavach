@@ -132,6 +132,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: Text(tr('Delete account', 'अकाउंट डिलीट करें'), style: const TextStyle(color: K.critical)), onTap: _delete),
         ])),
         Section(tr('Help', 'मदद'), Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          ListTile(contentPadding: EdgeInsets.zero, leading: const Icon(Icons.report_rounded), title: Text(tr('Report misuse', 'दुरुपयोग की शिकायत')),
+              onTap: () async {
+                final m = await askReport(context);
+                if (m == null || !context.mounted) return;
+                await attempt(context, () => sb.from('abuse_report').insert({
+                      'family_id': member?['family_id'], 'reporter': 'guardian', 'reporter_guardian': sb.auth.currentUser!.id, 'message': m}),
+                    ok: tr('Report sent. Thank you.', 'शिकायत भेजी गई। धन्यवाद।'));
+              }),
           ListTile(contentPadding: EdgeInsets.zero, leading: const Icon(Icons.call), title: const Text('Tele-MANAS 14416'), onTap: () => launchUrl(Uri.parse('tel:14416'))),
           ListTile(contentPadding: EdgeInsets.zero, leading: const Icon(Icons.call), title: const Text('Childline 1098'), onTap: () => launchUrl(Uri.parse('tel:1098'))),
           Text(tr('Grievance officer (DPDP): contact details are published in the privacy notice.', 'शिकायत अधिकारी (DPDP): संपर्क विवरण गोपनीयता सूचना में दिए गए हैं।'), style: const TextStyle(color: K.muted)),

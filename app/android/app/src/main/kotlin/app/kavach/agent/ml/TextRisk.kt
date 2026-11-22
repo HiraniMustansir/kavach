@@ -42,7 +42,12 @@ class TextRisk(lexiconJson: String) {
     }
 
     companion object {
-        fun load(ctx: Context) = TextRisk(ctx.assets.open("kavach/lexicon.json").bufferedReader().use { it.readText() })
+        fun load(ctx: Context) = TextRisk(bundled(ctx, "lexicon.json"))
+
+        /** Installed bundle file (CLS-8) if present, else the copy built into the APK. */
+        fun bundled(ctx: Context, name: String): String =
+            java.io.File(VisionGate.modelDir(ctx), name).takeIf { it.exists() }?.readText()
+                ?: ctx.assets.open("kavach/$name").bufferedReader().use { it.readText() }
 
         private val leet = mapOf('0' to 'o', '1' to 'i', '3' to 'e', '4' to 'a', '5' to 's', '7' to 't', '@' to 'a', '$' to 's')
         private val emoji = mapOf("🍆" to " eggplant ", "🍑" to " peach ", "🔞" to " adult ", "🔪" to " knife ", "🔫" to " gun ",

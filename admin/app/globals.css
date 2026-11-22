@@ -1,0 +1,16 @@
+:root { --bg: #f6f7fb; --card: #fff; --fg: #141826; --muted: #5b6275; --primary: #1f5eff; --bad: #d92d20; --ok: #12b76a; }
+@media (prefers-color-scheme: dark) { :root { --bg: #090b14; --card: #0f1220; --fg: #e7e9f2; --muted: #9aa1b5; --primary: #7fa2ff; } }
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+nav { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+nav button.on { background: var(--primary); color: #fff; }
+.card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 12px; overflow-x: auto; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stat b { display: block; font-size: 26px; }
+.muted { color: var(--muted); }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid color-mix(in srgb, var(--muted) 25%, transparent); vertical-align: top; }
+button, input, select, textarea { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--muted); background: var(--card); color: var(--fg); }
+button { cursor: pointer; }
+.err { color: var(--bad); }

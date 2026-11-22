@@ -16,7 +16,7 @@ sealed class Block(val reason: String) {
     class AppLimit(val minutes: Int) : Block("app_limit")
 }
 
-class Enforcer(private val store: Store, private val catalog: Catalog, private val usage: UsageCollector, private val ownPkg: String) {
+class Enforcer(private val store: Store, @Volatile var catalog: Catalog, private val usage: UsageCollector, private val ownPkg: String) {
 
     fun paused(now: Long = System.currentTimeMillis()) = store.pausedUntil > now
 

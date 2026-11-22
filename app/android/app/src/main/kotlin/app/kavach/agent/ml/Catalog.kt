@@ -41,7 +41,7 @@ class Catalog(json: String) {
     fun appCategory(pkg: String): String? = apps[pkg]
 
     companion object {
-        fun load(ctx: Context) = Catalog(ctx.assets.open("kavach/catalog.json").bufferedReader().use { it.readText() })
+        fun load(ctx: Context) = Catalog(TextRisk.bundled(ctx, "catalog.json"))
 
         /** Pulls a host out of address-bar text ("https://m.example.com/x", "example.com/…"). */
         fun hostOf(urlText: String): String? {

@@ -18,6 +18,7 @@ serve(async (req, route) => {
     case "digest": return digest(dev, input);
     case "policy": return json(await latestPolicy(dev.child_id));
     case "request": return childRequest(dev, input);
+    case "report": return report(dev, input);
     default: throw new HttpError(404, "no such route");
   }
 });
@@ -142,7 +143,31 @@ async function heartbeat(dev: Device, b: {
   const commands = check(await admin.from("device_command").select("id, kind, args, created_at")
     .eq("device_id", dev.id).is("acked_at", null).order("id").limit(20));
   const pol = await latestPolicy(dev.child_id);
-  return json({ commands, policyVersion: pol.version, tuning: await tuning(dev.child_id), serverTime: Date.now() });
+  return json({ commands, policyVersion: pol.version, tuning: await tuning(dev.child_id), bundle: await bundleFor(dev.id), serverTime: Date.now() });
+}
+
+/** CLS-8: newest active bundle whose staged rollout includes this device (stable per device id). */
+async function bundleFor(deviceId: string) {
+  const bucket = parseInt(deviceId.replace(/-/g, "").slice(0, 8), 16) % 100;
+  const rows = check(await admin.from("rule_bundle").select("version, manifest, manifest_text, signature, rollout_pct")
+    .eq("status", "active").order("created_at", { ascending: false }).limit(5)) as
+    { version: string; manifest: { files: { name: string; sha256: string }[] }; manifest_text: string; signature: string; rollout_pct: number }[];
+  const b = rows.find((r) => bucket < r.rollout_pct);
+  if (!b) return null;
+  const files = await Promise.all(b.manifest.files.map(async (f) => {
+    const { data } = await admin.storage.from("bundles").createSignedUrl(`${b.version}/${f.name}`, 3600);
+    return { name: f.name, sha256: f.sha256, url: data?.signedUrl };
+  }));
+  return { version: b.version, manifest: b.manifest_text, signature: b.signature, files };
+}
+
+// ADM-3: a child (or anyone holding the child phone) can report misuse, e.g. an adult being monitored.
+async function report(dev: Device, b: { message?: string }) {
+  const child = check(await admin.from("child").select("family_id").eq("id", dev.child_id).single()) as { family_id: string };
+  check(await admin.from("abuse_report").insert({
+    family_id: child.family_id, device_id: dev.id, reporter: "child_device", message: b.message?.slice(0, 1000) ?? null,
+  }));
+  return json({ ok: true });
 }
 
 /** CLS-11: per-family offsets from parent feedback, bounded ±1 logit (design §3.5 b_family). */
